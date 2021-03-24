@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewData["Title"] = "Dispensadora";
+}
+<h1>Dispensadora</h1>
+<br />
+@if (ViewData["monedasbuenas"] != null && ViewData["valorProducto"] != null && ViewData["devuelta"] != null || ViewData["monedas"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        Su devuelta es:@ViewData["devuelta"] , El valor del producto es: @ViewData["valorProducto"], Monedas buenas: @ViewData["monedasbuenas"], Monedas malas: @ViewData["monedasmalas"]
+    </div>
+}
+@if (ViewData["noPosicion"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        Producto no encontrado
+    </div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Codigo</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Cantidad</th>
+        </tr>
+    </thead>
+    @{List<Producto> productos = JsonConvert.DeserializeObject<List<Producto>>(HttpContext.Session.GetString("productos"));}
+        @foreach (Producto j in (List<Producto>)(ViewData["productos"]))
+        {
+            <tbody>
+                <tr>
+                    <td>@j.codigo</td>
+                    <td>@j.nombre</td>
+                    <td>@j.marca</td>
+                    <td>@j.precio</td>
+                    <td>@j.cantidad</td>
+
+                </tr>
+            </tbody>
+        }
+</table>
+
+<button type="button" data-toggle="modal" data-target="#comprar" class="btn btn-success">
+    Comprar
+</button>
+<button type="button" data-toggle="modal" data-target="#registrar" class="btn btn-outline-dark">
+    Registrar
+</button>
+<!-- Modal -->
+<form action="\Home\Comprar" method="post">
+    <div class="modal fade" id="comprar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detalle de compra</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+
+                        <label class="ml-2 mt-2"> Codigo:</label>
+                        <div class="col-3">
+                            <input type="text" class="form-control" name="codigop" />
+                        </div>
+
+                        <label class="mt-2">Cantidad:</label>
+                        <div class="col-2">
+                            <input type="number" class="form-control" name="cantidadp" />
+                        </div>
+
+
+                        <label class="mt-2">Monedas:</label>
+                        <div class="col-3">
+                            <input type="text" class="form-control" name="monedasp" />
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-dark">Finalizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- Modal 2-->
+<div class="modal fade" id="registrar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Registrar Producto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-group" action="\Home\Registrar" method="post">
+                    <div class="row">
+                        <div class="col-4">
+                            <label class="ml-2 mt-2"> Codigo:</label>
+                            <input type="text" class="form-control" name="codigon" />
+                        </div>
+                        <div class="col-4">
+                            <label class="mt-2">Nombre:</label>
+                            <input type="text" class="form-control" name="nombrep" />
+                        </div>
+                        <div class="col-4 ">
+                            <label class="mt-2">Marca:</label>
+                            <input type="text" class="form-control" name="marcap" />
+                        </div>
+                        <div class="col-4 mb-2 ">
+                            <label class="mt-2">Precio:</label>
+                            <input type="number" class="form-control" name="preciop" />
+                        </div>
+                        <br />
+                        <div class="col-4 mb-2">
+                            <label class="mt-2">Cantidad:</label>
+                            <input type="number" class="form-control" name="cantidadp" />
+                        </div>
+                        <br />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-dark">Registrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
